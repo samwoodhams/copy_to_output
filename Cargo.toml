@@ -16,4 +16,4 @@ include = ["src/", "example_files", "LICENSE-*", "README.md", "COPYRIGHT"]
 
 [dependencies]
 anyhow = "1.0"
-fs_extra = "1.2"
+fs_extra = "1.3"
