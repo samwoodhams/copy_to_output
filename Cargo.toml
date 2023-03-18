@@ -1,6 +1,6 @@
 [package]
 name = "copy_to_output"
-version = "2.0.0"
+version = "2.0.1"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
@@ -16,4 +16,4 @@ include = ["src/", "example_files", "LICENSE-*", "README.md", "COPYRIGHT"]
 
 [dependencies]
 anyhow = "1.0"
-fs_extra = "1.2"
+fs_extra = "1.3"
