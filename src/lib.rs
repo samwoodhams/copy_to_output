@@ -1,5 +1,6 @@
 use fs_extra::copy_items;
 use fs_extra::dir::CopyOptions;
+use std::path::Path;
 use anyhow::*;
 
 pub fn copy_to_output(path: &str, build_type: &str) -> Result<()> {
@@ -12,6 +13,13 @@ pub fn copy_to_output(path: &str, build_type: &str) -> Result<()> {
 
     from_path.push(path);
     copy_items(&from_path, &out_path, &options)?;
+
+    Ok(())
+}
+
+pub fn copy_to_output_path(path: &Path, build_type: &str) -> Result<()> {
+    let path_str = path.to_str().expect("Could not convert file path to string");
+    copy_to_output(path_str, build_type)?;
 
     Ok(())
 }
@@ -62,7 +70,7 @@ mod tests {
 
         // Create test directory and test file to copy
         fs::create_dir(dir_name).expect("could not create directory");
-        File::create(Path::new(&format!("{}/{}", dir_name, file_name))).expect("coud not create file");
+        File::create(Path::new(&format!("{}/{}", dir_name, file_name))).expect("could not create file");
 
         // Copy test directory to output
         copy_to_output(dir_name, "debug").expect("could not copy directory");
