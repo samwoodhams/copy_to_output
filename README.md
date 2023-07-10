@@ -31,7 +31,7 @@ edition = "2021"
 
 [build-dependencies]
 copy_to_output = "2.1.0"
-glob = "0.3""
+glob = "0.3"
  ```
  glob provides the * wildcard operator for the println!() line in build.rs  
    
