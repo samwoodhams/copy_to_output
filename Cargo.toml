@@ -1,10 +1,10 @@
 [package]
 name = "copy_to_output"
-version = "2.1.0"
+version = "2.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/prenwyn/copy_to_output"
+repository = "https://github.com/samwoodhams/copy_to_output"
 description = """
 A small rust library to copy files/folders from the project directory to the output directory
 """
