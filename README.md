@@ -30,7 +30,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-copy_to_output = "2.1.0"
+copy_to_output = "2.2.0"
 glob = "0.3"
  ```
  glob provides the * wildcard operator for the println!() line in build.rs  
