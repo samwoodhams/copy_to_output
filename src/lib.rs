@@ -7,7 +7,14 @@ use anyhow::*;
 
 pub fn copy_to_output(path: &str, build_type: &str) -> Result<()> {
     let mut out_path = PathBuf::new();
-    out_path.push("target");
+    let mut cargo_target = String::new();
+    cargo_target.push_str("target");
+    match get_cargo_target_dir() {
+        Ok(target_dir) => cargo_target.push_str(target_dir.to_str().expect("Could not convert file path to string")),
+        Err(_) => (),
+    }
+
+    out_path.push(&cargo_target);
 
     // This is a hack, ideally we would plug into https://docs.rs/cargo/latest/cargo/core/compiler/enum.CompileKind.html
     // However, since the path follows predictable rules https://doc.rust-lang.org/cargo/guide/build-cache.html
@@ -18,7 +25,7 @@ pub fn copy_to_output(path: &str, build_type: &str) -> Result<()> {
     if let Ok(triple) = build_target::target_triple() {
         if let Some(out_dir) = env::var_os("OUT_DIR") {
             if let Some(out_dir) = out_dir.to_str() {
-                if out_dir.contains(&format!("target{}{}", std::path::MAIN_SEPARATOR, triple)) {
+                if out_dir.contains(&format!("{}{}{}", cargo_target, std::path::MAIN_SEPARATOR, triple)) {
                     out_path.push(triple);
                 }
             }
@@ -43,4 +50,22 @@ pub fn copy_to_output_path(path: &Path, build_type: &str) -> Result<()> {
     copy_to_output(path_str, build_type)?;
 
     Ok(())
+}
+
+// Credit to ssrlive for this function
+// Taken from the following issue: https://github.com/rust-lang/cargo/issues/9661#issuecomment-1722358176
+fn get_cargo_target_dir() -> Result<std::path::PathBuf, Box<dyn std::error::Error>> {
+    let out_dir = std::path::PathBuf::from(std::env::var("OUT_DIR")?);
+    let profile = std::env::var("PROFILE")?;
+    let mut target_dir = None;
+    let mut sub_path = out_dir.as_path();
+    while let Some(parent) = sub_path.parent() {
+        if parent.ends_with(&profile) {
+            target_dir = Some(parent);
+            break;
+        }
+        sub_path = parent;
+    }
+    let target_dir = target_dir.ok_or("not found")?;
+    Ok(target_dir.to_path_buf())
 }
